@@ -6,15 +6,25 @@ def create(item):
 
 # READ
 def read(index):
-    return checklist[index]
+    if index_check(index):
+      return checklist[index]
+    else:
+      print("Invalid index")
 
 # UPDATE
 def update(index, item):
-    checklist[index] = item
+    if index_check(index):
+      checklist[index] = item
+    else:
+      print("Invalid index")
+
 
 # DESTROY
 def destroy(index):
-    checklist.pop(index)
+    if index_check(index):
+      checklist.pop(index)
+    else:
+      print("Invalid index")
 
 def list_all_items():
     index = 0
@@ -33,6 +43,7 @@ def user_input(prompt):
 
 
 def select(function_code):
+    function_code = function_code.upper()
     # Create item
     if function_code == "C":
         input_item = user_input("Input item:")
@@ -49,6 +60,18 @@ def select(function_code):
     elif function_code == "P":
         list_all_items()
 
+    elif function_code == "U":
+        item_index = int(user_input("Index Number?"))
+        new_item = user_input("Item? ")
+        # Remember that item_index must actually exist or our program will crash.
+        update(item_index, new_item)
+
+    elif function_code == "D":
+        item_index = int(user_input("Index Number?"))
+
+        # Remember that item_index must actually exist or our program will crash.
+        destroy(item_index)
+
     elif function_code == "Q":
         # This is where we want to stop our loop
         return False
@@ -57,6 +80,12 @@ def select(function_code):
     else:
         print("Unknown Option")
     return True
+
+def index_check(index):
+    if isinstance(index, int) and index <= (len(checklist) - 1):
+        return True
+    else:
+        return False
 
 def test():
     create("purple sox")
@@ -85,6 +114,6 @@ test()
 running = True
 while running:
     selection = user_input(
-        "Press C to add to list, R to Read from list, P to display list, and Q to quit"
+        "Press C to add to list, R to Read from list, P to display list, U to update an item from list and Q to quit"
     )
     running = select(selection)
